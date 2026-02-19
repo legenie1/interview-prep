@@ -72,11 +72,44 @@
 > | `ngAfterViewChecked` | Après vérification de la vue |
 > | `ngOnDestroy` | Avant destruction (cleanup) |
 
+**Q7: Quelle est la différence entre constructor et ngOnInit?**
+> **R:**
+> | Constructor | ngOnInit |
+> |-------------|----------|
+> | Fonction TypeScript/JavaScript native | Hook du cycle de vie Angular |
+> | Appelé lors de la création de l'instance | Appelé après l'initialisation des propriétés |
+> | Utilisé pour l'injection de dépendances | Utilisé pour l'initialisation de la logique |
+> | Les `@Input()` ne sont pas encore disponibles | Les `@Input()` sont disponibles |
+> | Exécuté avant Angular | Exécuté par Angular |
+> ```typescript
+> @Component({ selector: 'app-user' })
+> export class UserComponent implements OnInit {
+>   @Input() userId: number;
+>   user: User;
+>   
+>   // Constructor: Injection de dépendances uniquement
+>   constructor(private userService: UserService) {
+>     // ❌ this.userId est undefined ici
+>     console.log(this.userId);  // undefined
+>   }
+>   
+>   // ngOnInit: Logique d'initialisation
+>   ngOnInit() {
+>     // ✅ this.userId est disponible ici
+>     console.log(this.userId);  // valeur reçue du parent
+>     this.userService.getUser(this.userId).subscribe(
+>       user => this.user = user
+>     );
+>   }
+> }
+> ```
+> **Règle:** Utilisez le constructor uniquement pour l'injection de dépendances, et ngOnInit pour toute logique d'initialisation.
+
 ---
 
 ## 3. Data Binding
 
-**Q7: Quels sont les types de data binding?**
+**Q8: Quels sont les types de data binding?**
 > **R:**
 > ```html
 > <!-- 1. Interpolation (Component → View) -->
@@ -96,7 +129,7 @@
 > <input [ngModel]="name" (ngModelChange)="name = $event">
 > ```
 
-**Q8: Différence entre Property Binding et Interpolation?**
+**Q9: Différence entre Property Binding et Interpolation?**
 > **R:**
 > | Interpolation {{ }} | Property Binding [ ] |
 > |---------------------|---------------------|
@@ -108,13 +141,13 @@
 
 ## 4. Directives
 
-**Q9: Qu'est-ce qu'une Directive?**
+**Q10: Qu'est-ce qu'une Directive?**
 > **R:** C'est une classe qui modifie le comportement ou l'apparence des éléments DOM. Il existe 3 types:
 > - **Composants:** Directives avec template
 > - **Directives structurelles:** Modifient le DOM (*ngIf, *ngFor)
 > - **Directives d'attributs:** Modifient l'apparence (ngClass, ngStyle)
 
-**Q10: Quelles sont les directives structurelles principales?**
+**Q11: Quelles sont les directives structurelles principales?**
 > **R:**
 > ```html
 > <!-- *ngIf - Condition -->
@@ -137,7 +170,7 @@
 > </div>
 > ```
 
-**Q11: Quelles sont les directives d'attributs principales?**
+**Q12: Quelles sont les directives d'attributs principales?**
 > **R:**
 > ```html
 > <!-- ngClass - Classes CSS dynamiques -->
@@ -151,7 +184,7 @@
 > <input [(ngModel)]="name">
 > ```
 
-**Q12: Comment créer une directive personnalisée?**
+**Q13: Comment créer une directive personnalisée?**
 > **R:**
 > ```typescript
 > @Directive({
@@ -183,7 +216,7 @@
 
 ## 5. Services et Injection de Dépendances
 
-**Q13: Qu'est-ce qu'un Service Angular?**
+**Q14: Qu'est-ce qu'un Service Angular?**
 > **R:** C'est une classe qui encapsule la logique métier réutilisable (appels HTTP, validation, etc.). Il est injecté dans les composants via le système DI.
 > ```typescript
 > @Injectable({
@@ -200,10 +233,10 @@
 > }
 > ```
 
-**Q14: Qu'est-ce que l'Injection de Dépendances?**
+**Q15: Qu'est-ce que l'Injection de Dépendances?**
 > **R:** C'est un design pattern où les dépendances sont fournies à une classe plutôt que créées par celle-ci. Angular utilise un système d'injection hiérarchique.
 
-**Q15: Quels sont les niveaux de providedIn?**
+**Q16: Quels sont les niveaux de providedIn?**
 > **R:**
 > ```typescript
 > // 1. Root - Singleton global (recommandé)
@@ -225,7 +258,7 @@
 
 ## 6. Pipes
 
-**Q16: Qu'est-ce qu'un Pipe?**
+**Q17: Qu'est-ce qu'un Pipe?**
 > **R:** C'est une fonction de transformation de données dans le template.
 > ```html
 > <!-- Pipes intégrés -->
@@ -242,7 +275,7 @@
 > {{ name | uppercase | slice:0:5 }}
 > ```
 
-**Q17: Comment créer un Pipe personnalisé?**
+**Q18: Comment créer un Pipe personnalisé?**
 > **R:**
 > ```typescript
 > @Pipe({
@@ -261,10 +294,10 @@
 > <li *ngFor="let item of items | filter:searchText">{{ item.name }}</li>
 > ```
 
-**Q18: Différence entre Pure et Impure Pipe?**
+**Q19: Différence entre Pure et Impure Pipe?**
 > **R:**
 > | Pure Pipe (défaut) | Impure Pipe |
-> |--------------------|-------------|
+> |--------------------|-------------| 
 > | Exécuté si input change | Exécuté à chaque cycle de détection |
 > | Plus performant | Moins performant |
 > | `pure: true` | `pure: false` |
@@ -273,7 +306,7 @@
 
 ## 7. Routing
 
-**Q19: Comment configurer le routing?**
+**Q20: Comment configurer le routing?**
 > **R:**
 > ```typescript
 > // app-routing.module.ts
@@ -298,7 +331,7 @@
 > export class AppRoutingModule { }
 > ```
 
-**Q20: Comment naviguer entre les routes?**
+**Q21: Comment naviguer entre les routes?**
 > **R:**
 > ```html
 > <!-- Navigation déclarative -->
@@ -322,7 +355,7 @@
 > }
 > ```
 
-**Q21: Comment récupérer les paramètres de route?**
+**Q22: Comment récupérer les paramètres de route?**
 > **R:**
 > ```typescript
 > constructor(private route: ActivatedRoute) {}
@@ -343,7 +376,7 @@
 > }
 > ```
 
-**Q22: Qu'est-ce qu'un Guard?**
+**Q23: Qu'est-ce qu'un Guard?**
 > **R:** C'est une classe qui contrôle l'accès aux routes.
 > ```typescript
 > @Injectable({ providedIn: 'root' })
@@ -363,7 +396,7 @@
 > }
 > ```
 
-**Q23: Quels sont les types de Guards?**
+**Q24: Quels sont les types de Guards?**
 > **R:**
 > | Guard | Description |
 > |-------|-------------|
@@ -377,7 +410,7 @@
 
 ## 8. HTTP et Observables
 
-**Q24: Comment faire des appels HTTP?**
+**Q25: Comment faire des appels HTTP?**
 > **R:**
 > ```typescript
 > // app.module.ts
@@ -421,7 +454,7 @@
 > }
 > ```
 
-**Q25: Qu'est-ce qu'un Observable?**
+**Q26: Qu'est-ce qu'un Observable?**
 > **R:** C'est un flux de données asynchrone (de RxJS). Il peut émettre plusieurs valeurs au fil du temps.
 > ```typescript
 > // Création
@@ -439,7 +472,7 @@
 > });
 > ```
 
-**Q26: Quels sont les opérateurs RxJS courants?**
+**Q27: Quels sont les opérateurs RxJS courants?**
 > **R:**
 > ```typescript
 > import { map, filter, tap, catchError, switchMap, debounceTime } from 'rxjs/operators';
@@ -472,7 +505,7 @@
 > searchInput$.pipe(debounceTime(300));
 > ```
 
-**Q27: Différence entre Observable et Promise?**
+**Q28: Différence entre Observable et Promise?**
 > **R:**
 > | Observable | Promise |
 > |------------|---------|
@@ -481,16 +514,134 @@
 > | Annulable | Non annulable |
 > | Opérateurs RxJS | async/await |
 
+**Q29: Qu'est-ce qu'un Subject?**
+> **R:** C'est un type spécial d'Observable qui permet d'émettre des valeurs à plusieurs souscripteurs (multicast). Il agit à la fois comme Observable et Observer.
+> ```typescript
+> import { Subject } from 'rxjs';
+> 
+> const subject = new Subject<string>();
+> 
+> // Souscription 1
+> subject.subscribe(value => console.log('Sub 1:', value));
+> 
+> // Souscription 2
+> subject.subscribe(value => console.log('Sub 2:', value));
+> 
+> // Émission de valeurs
+> subject.next('Hello');    // Sub 1: Hello, Sub 2: Hello
+> subject.next('World');    // Sub 1: World, Sub 2: World
+> subject.complete();       // Termine le Subject
+> ```
+
+**Q30: Qu'est-ce qu'un BehaviorSubject?**
+> **R:** C'est un Subject qui stocke la dernière valeur émise et la fournit immédiatement à tout nouveau souscripteur. Il nécessite une valeur initiale.
+> ```typescript
+> import { BehaviorSubject } from 'rxjs';
+> 
+> const behaviorSubject = new BehaviorSubject<string>('Initial Value');
+> 
+> // Souscription 1 - reçoit immédiatement 'Initial Value'
+> behaviorSubject.subscribe(value => console.log('Sub 1:', value));
+> 
+> behaviorSubject.next('Hello');  // Sub 1: Hello
+> 
+> // Souscription 2 - reçoit immédiatement 'Hello' (dernière valeur)
+> behaviorSubject.subscribe(value => console.log('Sub 2:', value));
+> 
+> behaviorSubject.next('World');  // Sub 1: World, Sub 2: World
+> 
+> // Accès à la valeur actuelle sans souscrire
+> console.log(behaviorSubject.getValue());  // 'World'
+> ```
+
+**Q31: Quels sont les différents types de Subjects?**
+> **R:**
+> | Type | Description | Cas d'utilisation |
+> |------|-------------|-------------------|
+> | `Subject` | Multicast basique, pas de valeur initiale | Événements simples |
+> | `BehaviorSubject` | Stocke la dernière valeur, valeur initiale requise | État de l'application |
+> | `ReplaySubject` | Rejoue N dernières valeurs aux nouveaux souscripteurs | Historique de valeurs |
+> | `AsyncSubject` | Émet uniquement la dernière valeur à la completion | Requêtes HTTP simulées |
+> ```typescript
+> import { ReplaySubject, AsyncSubject } from 'rxjs';
+> 
+> // ReplaySubject - rejoue les 2 dernières valeurs
+> const replaySubject = new ReplaySubject<number>(2);
+> replaySubject.next(1);
+> replaySubject.next(2);
+> replaySubject.next(3);
+> replaySubject.subscribe(v => console.log(v));  // 2, 3
+> 
+> // AsyncSubject - émet seulement à la fin
+> const asyncSubject = new AsyncSubject<string>();
+> asyncSubject.next('A');
+> asyncSubject.next('B');
+> asyncSubject.subscribe(v => console.log(v));
+> asyncSubject.complete();  // 'B' (dernière valeur)
+> ```
+
+**Q31: Comment utiliser BehaviorSubject dans un Service pour gérer l'état?**
+> **R:**
+> ```typescript
+> @Injectable({ providedIn: 'root' })
+> export class AuthService {
+>   private currentUserSubject = new BehaviorSubject<User | null>(null);
+>   currentUser$ = this.currentUserSubject.asObservable();
+>   
+>   get currentUserValue(): User | null {
+>     return this.currentUserSubject.getValue();
+>   }
+>   
+>   login(credentials: { email: string; password: string }): Observable<User> {
+>     return this.http.post<User>('/api/login', credentials).pipe(
+>       tap(user => this.currentUserSubject.next(user))
+>     );
+>   }
+>   
+>   logout(): void {
+>     this.currentUserSubject.next(null);
+>   }
+>   
+>   isLoggedIn(): boolean {
+>     return this.currentUserValue !== null;
+>   }
+> }
+> 
+> // Utilisation dans un composant
+> @Component({ ... })
+> export class HeaderComponent implements OnInit {
+>   currentUser$: Observable<User | null>;
+>   
+>   constructor(private authService: AuthService) {
+>     this.currentUser$ = this.authService.currentUser$;
+>   }
+> }
+> 
+> // Dans le template avec async pipe
+> <div *ngIf="currentUser$ | async as user">
+>   Bienvenue {{ user.name }}
+> </div>
+> ```
+
+**Q32: Différence entre Subject et BehaviorSubject?**
+> **R:**
+> | Subject | BehaviorSubject |
+> |---------|-----------------|
+> | Pas de valeur initiale | Valeur initiale requise |
+> | Nouveaux souscripteurs ne reçoivent rien | Nouveaux souscripteurs reçoivent la dernière valeur |
+> | Pas d'accès à la valeur courante | `getValue()` disponible |
+> | Pour les événements | Pour l'état de l'application |
+
 ---
 
 ## 9. Formulaires
 
-**Q28: Quels sont les types de formulaires Angular?**
+**Q33: Quels sont les types de formulaires Angular?**
 > **R:**
 > - **Template-driven:** Logique dans le template (FormsModule)
 > - **Reactive (Model-driven):** Logique dans la classe (ReactiveFormsModule)
 
-**Q29: Comment créer un formulaire Template-driven?**
+**Q34: Comment créer un formulaire Template-driven?**
 > **R:**
 > ```html
 > <!-- FormsModule requis -->
@@ -506,7 +657,7 @@
 > </form>
 > ```
 
-**Q30: Comment créer un formulaire Reactive?**
+**Q35: Comment créer un formulaire Reactive?**
 > **R:**
 > ```typescript
 > // ReactiveFormsModule requis
@@ -569,7 +720,7 @@
 
 ## 10. Communication entre Composants
 
-**Q31: Comment communiquer du Parent vers l'Enfant?**
+**Q36: Comment communiquer du Parent vers l'Enfant?**
 > **R:** Avec `@Input()`
 > ```typescript
 > // Enfant
@@ -583,7 +734,7 @@
 > <app-child [message]="parentMessage" [alias]="parentData"></app-child>
 > ```
 
-**Q32: Comment communiquer de l'Enfant vers le Parent?**
+**Q37: Comment communiquer de l'Enfant vers le Parent?**
 > **R:** Avec `@Output()` et `EventEmitter`
 > ```typescript
 > // Enfant
@@ -604,7 +755,7 @@
 > }
 > ```
 
-**Q33: Comment communiquer entre composants non liés?**
+**Q38: Comment communiquer entre composants non liés?**
 > **R:** Avec un Service partagé et Subject
 > ```typescript
 > @Injectable({ providedIn: 'root' })
@@ -628,7 +779,7 @@
 
 ## 11. Intercepteurs HTTP
 
-**Q34: Qu'est-ce qu'un Intercepteur HTTP?**
+**Q39: Qu'est-ce qu'un Intercepteur HTTP?**
 > **R:** C'est une classe qui intercepte les requêtes/réponses HTTP pour les modifier (ajout de headers, logging, gestion d'erreurs).
 > ```typescript
 > @Injectable()
@@ -660,7 +811,7 @@
 
 ## 12. Tests Angular
 
-**Q35: Comment tester un composant?**
+**Q40: Comment tester un composant?**
 > **R:**
 > ```typescript
 > describe('UserComponent', () => {
@@ -692,7 +843,7 @@
 > });
 > ```
 
-**Q36: Comment tester un service?**
+**Q41: Comment tester un service?**
 > **R:**
 > ```typescript
 > describe('UserService', () => {
@@ -731,7 +882,7 @@
 
 ## 13. Bonnes Pratiques
 
-**Q37: Comment structurer un projet Angular?**
+**Q42: Comment structurer un projet Angular?**
 > **R:**
 > ```
 > src/app/
@@ -754,7 +905,7 @@
 > └── app-routing.module.ts
 > ```
 
-**Q38: Quelles sont les bonnes pratiques Angular?**
+**Q43: Quelles sont les bonnes pratiques Angular?**
 > **R:**
 > - Utiliser le Lazy Loading pour les modules
 > - Préférer les formulaires Reactive
@@ -765,7 +916,7 @@
 > - Suivre le style guide Angular officiel
 > - Utiliser TrackBy avec *ngFor
 
-**Q39: Comment optimiser les performances?**
+**Q44: Comment optimiser les performances?**
 > **R:**
 > - **OnPush Change Detection:** Détection de changements optimisée
 > - **TrackBy:** Pour les listes avec *ngFor

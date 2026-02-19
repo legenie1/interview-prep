@@ -78,13 +78,13 @@
 
 **Q7: Différence entre BeanFactory et ApplicationContext?**
 > **R:**
-> | BeanFactory | ApplicationContext |
-> |-------------|-------------------|
-> | Interface de base | Étend BeanFactory |
-> | Lazy loading | Eager loading |
-> | Fonctionnalités minimales | Fonctionnalités avancées |
-> | | Gestion des événements |
-> | | Internationalisation (i18n) |
+> | BeanFactory | ApplicationContext |<br />
+> |-------------|-------------------|<br />
+> | Interface de base | Étend BeanFactory |<br />
+> | Lazy loading | Eager loading |<br />
+> | Fonctionnalités minimales | Fonctionnalités avancées |<br />
+> | | Gestion des événements |<br />
+> | | Internationalisation (i18n) |<br />
 > | | Intégration AOP |
 
 **Q8: Qu'est-ce qu'un Bean Spring?**
@@ -103,12 +103,12 @@
 
 **Q10: Quels sont les scopes des beans?**
 > **R:**
-> | Scope | Description |
-> |-------|-------------|
-> | `singleton` | Une seule instance (défaut) |
-> | `prototype` | Nouvelle instance à chaque demande |
-> | `request` | Une instance par requête HTTP (Web) |
-> | `session` | Une instance par session HTTP (Web) |
+> | Scope | Description |<br />
+> |-------|-------------|<br />
+> | `singleton` | Une seule instance (défaut) |<br />
+> | `prototype` | Nouvelle instance à chaque demande |<br />
+> | `request` | Une instance par requête HTTP (Web) |<br />
+> | `session` | Une instance par session HTTP (Web) |<br />
 > | `application` | Une instance par ServletContext (Web) |
 
 ---
@@ -117,22 +117,22 @@
 
 **Q11: Quelles sont les annotations stéréotypes Spring?**
 > **R:**
-> | Annotation | Rôle |
-> |------------|------|
-> | `@Component` | Composant générique |
-> | `@Service` | Couche service (logique métier) |
-> | `@Repository` | Couche d'accès aux données (DAO) |
-> | `@Controller` | Contrôleur MVC (renvoie une vue) |
-> | `@RestController` | Contrôleur REST (renvoie JSON/XML) |
+> | Annotation | Rôle |<br />
+> |------------|------|<br />
+> | `@Component` | Composant générique |<br />
+> | `@Service` | Couche service (logique métier) |<br />
+> | `@Repository` | Couche d'accès aux données (DAO) |<br />
+> | `@Controller` | Contrôleur MVC (renvoie une vue) |<br />
+> | `@RestController` | Contrôleur REST (renvoie JSON/XML) |<br />
 > | `@Configuration` | Classe de configuration |
 
 **Q12: Différence entre @Component et @Bean?**
 > **R:**
-> | @Component | @Bean |
-> |------------|-------|
-> | Sur une classe | Sur une méthode |
-> | Détection automatique (scan) | Déclaration explicite |
-> | Pas de contrôle sur l'instanciation | Contrôle total |
+> | @Component | @Bean |<br />
+> |------------|-------|<br />
+> | Sur une classe | Sur une méthode |<br />
+> | Détection automatique (scan) | Déclaration explicite |<br />
+> | Pas de contrôle sur l'instanciation | Contrôle total |<br />
 > | | Pour les classes tierces |
 
 ---
@@ -235,10 +235,10 @@
 
 **Q20: Différence entre @Controller et @RestController?**
 > **R:**
-> | @Controller | @RestController |
-> |-------------|-----------------|
-> | Renvoie une vue (HTML) | Renvoie des données (JSON/XML) |
-> | Utilise ViewResolver | Utilise HttpMessageConverter |
+> | @Controller | @RestController |<br />
+> |-------------|-----------------|<br />
+> | Renvoie une vue (HTML) | Renvoie des données (JSON/XML) |<br />
+> | Utilise ViewResolver | Utilise HttpMessageConverter |<br />
 > | Nécessite @ResponseBody | @ResponseBody inclus |
 
 **Q21: Quelles sont les annotations de mapping?**
@@ -314,10 +314,10 @@
 
 **Q24: Différence entre @ControllerAdvice et @RestControllerAdvice?**
 > **R:**
-> | @ControllerAdvice | @RestControllerAdvice |
-> |-------------------|----------------------|
-> | Pour @Controller | Pour @RestController |
-> | Renvoie une vue | Renvoie JSON/XML |
+> | @ControllerAdvice | @RestControllerAdvice |<br />
+> |-------------------|----------------------|<br />
+> | Pour @Controller | Pour @RestController |<br />
+> | Renvoie une vue | Renvoie JSON/XML |<br />
 > | Nécessite @ResponseBody | @ResponseBody inclus |
 
 ---
@@ -354,13 +354,13 @@
 
 **Q26: Quels sont les niveaux de propagation des transactions?**
 > **R:**
-> | Propagation | Description |
-> |-------------|-------------|
-> | REQUIRED | Utilise la transaction existante ou en crée une (défaut) |
-> | REQUIRES_NEW | Crée toujours une nouvelle transaction |
-> | SUPPORTS | Utilise la transaction si elle existe, sinon non |
-> | NOT_SUPPORTED | Exécute sans transaction |
-> | MANDATORY | Transaction obligatoire, sinon exception |
-> | NEVER | Exception si une transaction existe |
+> | Propagation | Description |<br />
+> |-------------|-------------|<br />
+> | REQUIRED | Utilise la transaction existante ou en crée une (défaut) |<br />
+> | REQUIRES_NEW | Crée toujours une nouvelle transaction |<br />
+> | SUPPORTS | Utilise la transaction si elle existe, sinon non |<br />
+> | NOT_SUPPORTED | Exécute sans transaction |<br />
+> | MANDATORY | Transaction obligatoire, sinon exception |<br />
+> | NEVER | Exception si une transaction existe |<br />
 > | NESTED | Transaction imbriquée |
 

@@ -52,12 +52,12 @@
 
 **Q10: Quels sont les 4 modificateurs d'acces en Java?**
 > **R:**
-> | Modificateur | Classe | Package | Sous-classe | Monde |
-> |--------------|--------|---------|-------------|-------|
-> | `private`    | Oui    | Non     | Non         | Non   |
-> | `default`    | Oui    | Oui     | Non         | Non   |
-> | `protected`  | Oui    | Oui     | Oui         | Non   |
-> | `public`     | Oui    | Oui     | Oui         | Oui   |
+> | Modificateur | Classe | Package | Sous-classe | Monde |<br />
+> |--------------|--------|---------|-------------|-------|<br />
+> | `private`  | Oui    | Non     | Non         | Non   |<br />
+> | `default`    | Oui    | Oui     | Non         | Non   |<br />
+> | `protected`  | Oui    | Oui     | Oui         | Non   |<br />
+> | `public`     | Oui    | Oui     | Oui         | Oui   |<br />
 
 ---
 
@@ -65,11 +65,11 @@
 
 **Q11: Quelle est la difference entre une classe abstraite et une interface?**
 > **R:**
-> | Classe Abstraite | Interface |
-> |------------------|-----------|
-> | Peut avoir des methodes concretes et abstraites | Toutes les methodes sont abstraites (avant Java 8) |
-> | Peut avoir des attributs d'instance | Uniquement des constantes (`public static final`) |
-> | Une classe ne peut heriter que d'une seule classe abstraite | Une classe peut implementer plusieurs interfaces |
+> | Classe Abstraite | Interface |<br />
+> |------------------|-----------|<br />
+> | Peut avoir des methodes concretes et abstraites | Toutes les methodes sont abstraites (avant Java 8) |<br />
+> | Peut avoir des attributs d'instance | Uniquement des constantes (`public static final`) |<br />
+> | Une classe ne peut heriter que d'une seule classe abstraite | Une classe peut implementer plusieurs interfaces |<br />
 > | Mot-cle: `extends` | Mot-cle: `implements` |
 
 **Q12: Quand utiliser une classe abstraite vs une interface?**
