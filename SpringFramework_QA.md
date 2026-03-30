@@ -364,3 +364,101 @@
 > | NEVER | Exception si une transaction existe |<br />
 > | NESTED | Transaction imbriquée |
 
+---
+
+## 10. JDBC avec Spring
+
+**Q27: Qu'est-ce que Spring JDBC et JdbcTemplate?**
+> **R:** Spring JDBC simplifie l'accès à la base de données en évitant le code répétitif JDBC pur (ouverture/fermeture de connexion, gestion des exceptions). `JdbcTemplate`:
+> - Exécute les requêtes SQL
+> - Gère automatiquement les ressources
+> - Convertit les exceptions SQL en exceptions Spring (`DataAccessException`)
+
+**Q28: Comment faire une requête avec JdbcTemplate?**
+> **R:**
+> ```java
+> @Repository
+> public class UserRepository {
+>     private final JdbcTemplate jdbcTemplate;
+> 
+>     public UserRepository(JdbcTemplate jdbcTemplate) {
+>         this.jdbcTemplate = jdbcTemplate;
+>     }
+> 
+>     public List<User> findAll() {
+>         String sql = "SELECT id, name, email FROM users";
+>         return jdbcTemplate.query(sql, (rs, rowNum) ->
+>             new User(rs.getLong("id"), rs.getString("name"), rs.getString("email"))
+>         );
+>     }
+> }
+> ```
+
+**Q29: Quelle est la différence entre queryForObject et query?**
+> **R:**
+> - `queryForObject`: attend exactement **1 résultat** (sinon exception)
+> - `query`: retourne une **liste** (0, 1 ou plusieurs résultats)
+
+**Q30: À quoi sert NamedParameterJdbcTemplate?**
+> **R:** Il permet d'utiliser des paramètres nommés (`:name`) au lieu de `?`, ce qui rend les requêtes plus lisibles et moins sujettes aux erreurs d'ordre.
+> ```java
+> String sql = "SELECT * FROM users WHERE name = :name AND active = :active";
+> MapSqlParameterSource params = new MapSqlParameterSource()
+>         .addValue("name", "Alice")
+>         .addValue("active", true);
+> List<User> users = namedParameterJdbcTemplate.query(sql, params, userRowMapper);
+> ```
+
+---
+
+## 11. Testing avec Spring
+
+**Q31: Quelle est la différence entre test unitaire et test d'intégration?**
+> **R:**
+> - **Test unitaire:** teste une classe isolée (souvent avec des mocks)
+> - **Test d'intégration:** teste l'interaction entre plusieurs composants (contexte Spring, DB, web, etc.)
+
+**Q32: Comment tester une classe Spring avec JUnit 5?**
+> **R:**
+> ```java
+> @ExtendWith(SpringExtension.class)
+> @ContextConfiguration(classes = AppConfig.class)
+> class UserServiceTest {
+> 
+>     @Autowired
+>     private UserService userService;
+> 
+>     @Test
+>     void shouldReturnUser() {
+>         User user = userService.getUser(1L);
+>         assertNotNull(user);
+>     }
+> }
+> ```
+
+**Q33: À quoi sert @SpringBootTest?**
+> **R:** `@SpringBootTest` charge un contexte Spring Boot complet pour des tests d'intégration proches de la production. C'est puissant mais plus lent qu'un test unitaire.
+
+**Q34: Qu'est-ce que @MockBean (Spring Boot)?**
+> **R:** `@MockBean` remplace un bean du contexte Spring par un mock Mockito. Utile pour tester une couche (ex: service) sans dépendre des composants externes (ex: API, repository réel).
+
+**Q35: Comment tester la couche web Spring MVC?**
+> **R:**
+> ```java
+> @WebMvcTest(UserController.class)
+> class UserControllerTest {
+> 
+>     @Autowired
+>     private MockMvc mockMvc;
+> 
+>     @MockBean
+>     private UserService userService;
+> 
+>     @Test
+>     void shouldReturn200() throws Exception {
+>         mockMvc.perform(get("/api/users/1"))
+>                 .andExpect(status().isOk());
+>     }
+> }
+> ```
+

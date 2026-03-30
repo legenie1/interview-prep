@@ -926,3 +926,100 @@
 > - **Tree Shaking:** Élimination du code mort
 > - **Bundle Optimization:** Analyser avec webpack-bundle-analyzer
 
+---
+
+## 14. ViewChild, ContentChild et Queries
+
+**Q45: Qu'est-ce que `@ViewChild`?**
+> **R:** `@ViewChild` permet de récupérer une référence vers un élément, un composant, une directive ou un `TemplateRef` présent dans la **vue du composant courant** (template HTML du composant).
+> ```typescript
+> @Component({
+>   selector: 'app-parent',
+>   template: `
+>     <app-child #childCmp></app-child>
+>     <input #searchInput>
+>   `
+> })
+> export class ParentComponent implements AfterViewInit {
+>   @ViewChild('searchInput') inputRef: ElementRef<HTMLInputElement>;
+>   @ViewChild('childCmp') childComponent: ChildComponent;
+> 
+>   ngAfterViewInit() {
+>     this.inputRef.nativeElement.focus();
+>     this.childComponent.loadData();
+>   }
+> }
+> ```
+
+**Q46: Qu'est-ce que `@ContentChild`?**
+> **R:** `@ContentChild` récupère un élément projeté via `<ng-content>` depuis le parent (contenu externe), et non un élément déclaré dans le template interne du composant.
+> ```typescript
+> // card.component.ts
+> @Component({
+>   selector: 'app-card',
+>   template: `<div class="card"><ng-content></ng-content></div>`
+> })
+> export class CardComponent implements AfterContentInit {
+>   @ContentChild('title') titleRef: ElementRef;
+> 
+>   ngAfterContentInit() {
+>     console.log(this.titleRef.nativeElement.textContent);
+>   }
+> }
+> 
+> // utilisation
+> <app-card>
+>   <h2 #title>Mon titre projeté</h2>
+> </app-card>
+> ```
+
+**Q47: Différence entre `@ViewChild` et `@ContentChild`?**
+> **R:**
+> | `@ViewChild` | `@ContentChild` |
+> |--------------|-----------------|
+> | Lit le template du composant lui-même | Lit le contenu projeté (`ng-content`) |
+> | Disponible via les hooks *view* | Disponible via les hooks *content* |
+> | Cas: accéder à un enfant direct dans la vue | Cas: accéder à ce que le parent injecte dans le composant |
+
+**Q48: Que fait l'option `{ static: true/false }` avec `@ViewChild` (Angular 8)?**
+> **R:** En Angular 8, il faut préciser `static`:
+> - `static: true` → la query est résolue avant `ngOnInit` (utile si l'élément est toujours présent)
+> - `static: false` → la query est résolue en `ngAfterViewInit` (recommandé si l'élément dépend de `*ngIf`, `*ngFor`, etc.)
+> ```typescript
+> @ViewChild('alwaysHere', { static: true }) alwaysHere: ElementRef;
+> @ViewChild('maybeHere', { static: false }) maybeHere: ElementRef;
+> ```
+
+**Q49: Quand utiliser `@ViewChildren` et `@ContentChildren`?**
+> **R:** Quand on veut plusieurs résultats (liste) au lieu d'un seul.
+> ```typescript
+> @Component({
+>   selector: 'app-list',
+>   template: `<app-item *ngFor="let item of items"></app-item>`
+> })
+> export class ListComponent implements AfterViewInit {
+>   @ViewChildren(ItemComponent) itemComponents: QueryList<ItemComponent>;
+> 
+>   ngAfterViewInit() {
+>     console.log(this.itemComponents.length);
+>     this.itemComponents.changes.subscribe(() => {
+>       console.log('La liste a changé');
+>     });
+>   }
+> }
+> ```
+
+**Q50: Quels hooks utiliser avec `ViewChild`/`ContentChild`?**
+> **R:**
+> - `@ContentChild` / `@ContentChildren` → `ngAfterContentInit` et `ngAfterContentChecked`
+> - `@ViewChild` / `@ViewChildren` → `ngAfterViewInit` et `ngAfterViewChecked`
+> - Éviter d'utiliser ces références dans le constructor
+
+**Q51: Quelles bonnes pratiques avec `ViewChild`/`ContentChild`?**
+> **R:**
+> - Préférer `@Input()` / `@Output()` pour la communication métier
+> - Utiliser `ViewChild` pour interaction UI (focus, accès API composant enfant, `TemplateRef`)
+> - Limiter l'accès direct au DOM (`ElementRef`) et privilégier `Renderer2` si possible
+> - Vérifier la présence de la référence avant usage (`if (this.child) { ... }`)
+> - Éviter une logique métier lourde dans `ngAfterViewInit` / `ngAfterContentInit`
+
